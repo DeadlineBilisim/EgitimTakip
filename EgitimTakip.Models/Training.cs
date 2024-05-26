@@ -15,5 +15,6 @@ namespace EgitimTakip.Models
 
 
     //    public virtual ICollection<TrainingSubjects> TrainingSubjects { get; set;}
+    public virtual ICollection<TrainingsSubjectsMap> TrainingsSubjectsMap { get; set; }=new List<TrainingsSubjectsMap>();
     }
 }
