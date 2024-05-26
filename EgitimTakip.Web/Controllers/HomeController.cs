@@ -15,6 +15,7 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult Index()
         {
+          
             return View();
         }
 
