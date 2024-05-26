@@ -24,6 +24,7 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult Add(Training training, List<TrainingsSubjectsMap> trainingsSubjectsMaps)
         {
+            //ön yuzden, arka tarafa bir şekilde, her bir konunun Duration'ınını da göndermemiz gereiyor. Zaten elimizde, hem trainingID'yi hem SubjectId'yi hemde Duration'ı tutan zaten bir nesne var. Bu da TrainingsSubjectsMap nesnesi. Biz direkt ön yuzden arka yuze, bu nesne tipinde bir json olusturur gonderirsek, backend'deki işimiz aşırı kolaylaşmış olur.
             _context.Trainings.Add(training);
             _context.SaveChanges();
 
