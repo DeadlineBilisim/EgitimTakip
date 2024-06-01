@@ -8,6 +8,8 @@ namespace EgitimTakip.Models
 {
     public class TrainingSubject:BaseModel
     {
+        //
+
         public string Name {  get; set; }
         public string Code { get; set; }
         public int TrainingCategoryId {  get; set; }
