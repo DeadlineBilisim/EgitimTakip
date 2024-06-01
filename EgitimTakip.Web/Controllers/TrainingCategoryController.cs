@@ -41,8 +41,20 @@ namespace EgitimTakip.Web.Controllers
        
         
         }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+        //   var trainingCategory= _context.TrainingCategories.Find(id);
+        var trainingCategory = _context.TrainingCategories.FirstOrDefault(tc => tc.Id == id);
+
+            trainingCategory.IsDeleted = true;
+            _context.TrainingCategories.Update(trainingCategory);
+            _context.SaveChanges();
+            return Ok();
+        }
 
 
+       
 
     }
 }
