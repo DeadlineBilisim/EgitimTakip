@@ -49,7 +49,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.Company", b =>
@@ -77,7 +77,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.Employee", b =>
@@ -109,7 +109,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.Training", b =>
@@ -136,7 +136,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Trainings");
+                    b.ToTable("Trainings", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.TrainingCategory", b =>
@@ -159,7 +159,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TrainingCategories");
+                    b.ToTable("TrainingCategories", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.TrainingSubject", b =>
@@ -191,7 +191,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("TrainingCategoryId");
 
-                    b.ToTable("TrainingSubjects");
+                    b.ToTable("TrainingSubjects", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.TrainingsSubjectsMap", b =>
@@ -209,7 +209,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("TrainingSubjectId");
 
-                    b.ToTable("TrainingsSubjectsMaps");
+                    b.ToTable("TrainingsSubjectsMaps", (string)null);
                 });
 
             modelBuilder.Entity("EmployeeTraining", b =>
@@ -224,7 +224,7 @@ namespace EgitimTakip.Data.Migrations
 
                     b.HasIndex("TrainingsId");
 
-                    b.ToTable("EmployeeTraining");
+                    b.ToTable("EmployeeTraining", (string)null);
                 });
 
             modelBuilder.Entity("EgitimTakip.Models.Company", b =>
