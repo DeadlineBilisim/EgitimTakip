@@ -25,6 +25,7 @@ namespace EgitimTakip.Data
         public virtual DbSet<Training> Trainings { get; set; }
         public virtual DbSet<TrainingSubject> TrainingSubjects { get; set; }
         public virtual DbSet<TrainingsSubjectsMap> TrainingsSubjectsMaps { get; set; }
+        public virtual DbSet<TrainingCategory> TrainingCategories { get; set; }
 
 
         //FLUENT API
