@@ -5,7 +5,7 @@
             <div class="card-header bg-gradient-success text-white">
                 <div class="row">
                     <div class="col-11"><box-icon name="book-bookmark" color="white" size="sm" animation="tada"></box-icon> Eğitim Kategorileri</div>
-                    <div class="col-1 text-end"><a id="btnAdd"  href="#" class="btn btn-outline-dark">+ Yeni</a></div>
+                    <div class="col-1 text-end"><a id="btnAdd" href="#" class="btn btn-outline-dark">+ Yeni</a></div>
                 </div>
 
             </div>
@@ -31,9 +31,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle">
-                    
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"                        aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -62,6 +61,16 @@
 
 @section Scripts {
     <script>
+
+       
+
+            $('#modal').on('shown.bs.modal', () => {
+                $('#txtCategoryName').focus().off("keypress").keypress((event) => {
+                    if (event.key == "Enter")
+                        $("#btnSave").trigger("click");
+                });
+            })
+
         var DataTable = "";
         // var _dataTable = "";
 
@@ -72,20 +81,22 @@
                 $("#modal").modal("show");
                 $("#btnSave").text("Kaydet");
                 $("#modalTitle").text("Yeni Kategori Ekle");
-                $("#txtCategoryName").val('');
+                $('#txtCategoryName').val('');
+
+
                 $("#btnSave").off().click(() => {
 
                     $.ajax({
                         url: '/TrainingCategory/Add',
-                        type:'POST',
+                        type: 'POST',
                         data: {
                             trainingCategory: {
-                                name:$("#txtCategoryName").val()
+                                name: $("#txtCategoryName").val()
                             }
                         },
                         success: (res) => {
                             $("#modal").modal("hide");
-                            DataTable.row.add(res).draw();
+                            DataTable.row.add(res).draw(false);
 
                         }
                     });
@@ -104,7 +115,7 @@
                     {
                         data: 'id', title: 'İşlemler', render: (data) => {
 
-                            return `<a class="me-4" title="Sil" href="#"><box-icon name="trash-alt" color="red" size="sm" class="bx-burst-hover" ></box-icon></a> <a title="Düzenle" href="#"><box-icon class="bx-burst-hover" name="pencil" color="blue" size="sm" ></box-icon></a> `;
+                            return `<a onclick="deleteCategory(${data},this)" class="me-4" title="Sil" href="#"><box-icon name="trash-alt" color="red" size="sm" class="bx-burst-hover" ></box-icon></a> <a onclick="updateCategory(${data},this)" title="Düzenle" href="#"><box-icon class="bx-burst-hover" name="pencil" color="blue" size="sm" ></box-icon></a> `;
 
                         }
                     }
@@ -116,6 +127,62 @@
 
         });
 
+
+        function deleteCategory(categoryId, button) {
+
+            if (confirm("Silmek istediğinize emin misiniz ?")) {
+
+                $.ajax({
+                    url: '/TrainingCategory/Delete',
+                    type: 'POST',
+                    data: {
+                        id: categoryId
+                    },
+                    success: () => {
+                        let satir = $(button).parent().parent();
+                       
+                        DataTable.row(satir).remove().draw(false);
+                    }
+                });
+
+            }
+
+        }
+
+        function updateCategory(categoryId, button) { 
+
+            $.ajax({
+                url:'/TrainingCategory/GetById',
+                type:'POST',
+                data: {
+                    id: categoryId
+                },
+                success: (res) => {
+                    $("#modal").modal("show");
+                    $("#txtCategoryName").val(res.name);
+                    $("#modalTitle").text("Kategori Düzenle");
+                    $("#btnSave").text("Güncelle").off().click(() => {
+
+                        res.name = $("#txtCategoryName").val();
+
+                        $.ajax({
+                            url: '/TrainingCategory/Update',
+                            type:'POST',
+                            data: {
+                                trainingCategory:res
+                            },
+                            success: () => {
+                                let satir = $(button).parent().parent();
+                                DataTable.row(satir).data(res).draw(false);
+                                $("#modal").modal("hide");
+                            }
+                        });
+                    });
+
+                }
+            });
+        
+        }
 
 
     </script>
