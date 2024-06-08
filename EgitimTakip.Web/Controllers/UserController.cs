@@ -30,6 +30,7 @@ namespace EgitimTakip.Web.Controllers
         public async Task<IActionResult> Login(AppUser user)
         {
             AppUser appUser = _context.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+            
             if ((appUser != null))
             {
                 List<Claim> claims = new List<Claim>();
