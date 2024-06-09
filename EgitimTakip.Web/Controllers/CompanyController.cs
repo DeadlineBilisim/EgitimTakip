@@ -1,6 +1,6 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
-using EgitimTakip.Repository.Shared.Abstract;
+using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +22,7 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult GetAll()
         {
-            //   return Json(_context.Companies.Where(c=>!c.IsDeleted).ToList());
-            return Json(_repo.GetAll());
+           return Json(_repo.GetAll());
         }
         [HttpPost]
         public IActionResult Add(Company company)

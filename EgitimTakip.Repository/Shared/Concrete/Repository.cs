@@ -1,6 +1,6 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
-using EgitimTakip.Repository.Shared.Abstract;
+using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EgitimTakip.Repository.Shared.Concrete
+namespace EgitimTakip.IRepository.Shared.Concrete
 {
     public class Repository<T> : IRepository<T> where T : BaseModel
 
@@ -27,11 +27,19 @@ namespace EgitimTakip.Repository.Shared.Concrete
 
         public T Add(T entity)
         {
+            try
+            {
+                _dbSet.Add(entity);
+                Save();
+                return entity;
+            }
+            catch
+            {
+                return entity;
+            }
 
          //   _context.Set<T>().Add(entity);
-         _dbSet.Add(entity);
-            Save();
-            return entity;
+       
 
         }
 

@@ -1,16 +1,17 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
+using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class TrainingCategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository<TrainingCategory> _repo;
 
-        public TrainingCategoryController(ApplicationDbContext context)
+        public TrainingCategoryController(IRepository<TrainingCategory> repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public IActionResult Index()
@@ -20,23 +21,20 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(new { data = _context.TrainingCategories.Where(tc => !tc.IsDeleted).ToList() });
+            return Json(new { data = _repo.GetAll() });
         }
         [HttpPost]
         public IActionResult Add(TrainingCategory trainingCategory) 
         {
-            try
+          
+           TrainingCategory category= _repo.Add(trainingCategory);
+            if(category.Id==0)
             {
-                _context.TrainingCategories.Add(trainingCategory);
-                _context.SaveChanges();
-                //  return StatusCode(200, trainingCategory);
-                return Ok(trainingCategory);
+                return BadRequest();
             }
-            catch (Exception ex)
+            else
             {
-                // return BadRequest(ex);
-                return BadRequest(ex);
-                //500 - Internal Server Error
+                return Ok(category);
             }
        
         
@@ -44,26 +42,25 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-        //   var trainingCategory= _context.TrainingCategories.Find(id);
-        var trainingCategory = _context.TrainingCategories.FirstOrDefault(tc => tc.Id == id);
+            //   var trainingCategory= _context.TrainingCategories.Find(id);
+            //var trainingCategory = _context.TrainingCategories.FirstOrDefault(tc => tc.Id == id);
 
-            trainingCategory.IsDeleted = true;
-            _context.TrainingCategories.Update(trainingCategory);
-            _context.SaveChanges();
-            return Ok();
+            //    trainingCategory.IsDeleted = true;
+            //    _context.TrainingCategories.Update(trainingCategory);
+            //    _context.SaveChanges();
+            //    return Ok();
+            return Ok(_repo.Delete(id) is object);
         }
 
         [HttpPost]
         public IActionResult Update(TrainingCategory trainingCategory)
         {
-            _context.TrainingCategories.Update(trainingCategory);
-            _context.SaveChanges();
-            return Ok(trainingCategory);
+            return Ok(_repo.Update(trainingCategory));
         }
         [HttpPost]
         public IActionResult GetById(int id)
         {
-            return Ok(_context.TrainingCategories.Find(id));
+            return Ok(_repo.GetById(id));
         }
 
 

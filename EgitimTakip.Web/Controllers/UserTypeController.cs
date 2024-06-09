@@ -1,4 +1,5 @@
 ﻿using EgitimTakip.Data;
+using EgitimTakip.IRepository.Shared.Abstract;
 using EgitimTakip.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,11 +7,11 @@ namespace EgitimTakip.Web.Controllers
 {
     public class UserTypeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository<AppUserType> _repo;
 
-        public UserTypeController(ApplicationDbContext context)
+        public UserTypeController(IRepository<AppUserType> repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public IActionResult Index()
@@ -21,32 +22,27 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(new {data=_context.UserTypes.Where(ut=>!ut.IsDeleted)});
+            return Json(new {data=_repo.GetAll()});
             //JSON nesnesi geriye döndürüyor.
             //anonim obje oluşturup, veritabanına baglantı açıp kapatıypr. Ve bir de gelen verinin nasıl filtrelenmesi gerektiğine karar veriyor.
         }
         [HttpPost]
         public IActionResult Add(AppUserType userType)
         {
-           _context.UserTypes.Add(userType);
-            _context.SaveChanges();
-            return Ok(userType);
+          
+            return Ok(_repo.Add(userType));
         }
 
         public IActionResult Update(AppUserType userType)
         {
-            _context.UserTypes.Update(userType);
-            _context.SaveChanges();
-            return Ok(userType);
+         
+            return Ok(_repo.Update(userType));
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var userType = _context.UserTypes.Find(id);
-            userType.IsDeleted = true;
-            _context.UserTypes.Update(userType);
-            _context.SaveChanges();
-            return Ok();
+          
+            return Ok(_repo.Delete(id) is object);
 
             //geriye OK mesajı gönderiyor
             //vveritabanına baglantı açıp kapatıyor.
@@ -56,7 +52,7 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult GetById(int id)
         {
-            return Ok(_context.UserTypes.Find(id));
+            return Ok(_repo.GetById(id));
 
             //geriye bir tane OK mesajı içerisinde obje  dönüyor.
             //_context'e baglanıyor ve bu vesileyle bir veri tabanı bağlantısı açıp kapatıyor.

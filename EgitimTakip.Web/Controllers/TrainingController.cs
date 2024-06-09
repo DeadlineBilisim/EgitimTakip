@@ -1,16 +1,20 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
+using EgitimTakip.IRepository.Abstract;
+using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class TrainingController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITrainingRepository _repo;
+        private readonly IRepository<TrainingsSubjectsMap> _subjectsRepo;
 
-        public TrainingController(ApplicationDbContext context)
+        public TrainingController(ITrainingRepository repo, IRepository<TrainingsSubjectsMap> subjectsRepo)
         {
-            _context = context;
+            _repo = repo;
+            _subjectsRepo = subjectsRepo;
         }
 
         public IActionResult Index()
@@ -19,40 +23,33 @@ namespace EgitimTakip.Web.Controllers
         }
         public IActionResult GetAll(int companyId)
         {
-            return Json(new { data = _context.Trainings.Where(t => t.CompanyId == companyId && !t.IsDeleted) });
+            return Json(new { data = _repo.GetAll(companyId) });
         }
         [HttpPost]
         public IActionResult Add(Training training, List<TrainingsSubjectsMap> trainingsSubjectsMaps)
         {
             //ön yuzden, arka tarafa bir şekilde, her bir konunun Duration'ınını da göndermemiz gereiyor. Zaten elimizde, hem trainingID'yi hem SubjectId'yi hemde Duration'ı tutan zaten bir nesne var. Bu da TrainingsSubjectsMap nesnesi. Biz direkt ön yuzden arka yuze, bu nesne tipinde bir json olusturur gonderirsek, backend'deki işimiz aşırı kolaylaşmış olur.
-            _context.Trainings.Add(training);
-            _context.SaveChanges();
-
-            foreach(var item in trainingsSubjectsMaps)
-            {
-                _context.TrainingsSubjectsMaps.Add(item);
-            }
-            _context.SaveChanges();
-        
-            return Ok(training);
+       
+            return Ok(_repo.Add(training,trainingsSubjectsMaps));
 
         }
 
         [HttpPost]
-        public IActionResult Update(Training training)
+        public IActionResult Update(Training training, List<TrainingsSubjectsMap> trainingsSubjectsMaps)
         {
-            _context.Trainings.Update(training);
-            _context.SaveChanges();
-            return Ok(training);
+            training.TrainingsSubjectsMap=new List<TrainingsSubjectsMap>();
+            _repo.Update(training);
+
+          
+            
+
+            training.TrainingsSubjectsMap = trainingsSubjectsMaps;
+            return Ok(_repo.Update(training));
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
-           Training training= _context.Trainings.Find(id);
-            training.IsDeleted=true;
-            _context.Trainings.Update(training);
-            _context.SaveChanges();
-            return Ok(training);
+            return Ok(_repo.Delete(id) is object);
         }
     }
 }

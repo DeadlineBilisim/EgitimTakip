@@ -1,19 +1,21 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
+using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using EgitimTakip.IRepository.Abstract;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUserRepository _repo;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(IUserRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public IActionResult Index()
@@ -29,7 +31,7 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AppUser user)
         {
-            AppUser appUser = _context.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+            AppUser appUser = _repo.CheckUser(user.UserName,user.Password);
             
             if ((appUser != null))
             {
@@ -59,38 +61,28 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult Add(AppUser user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Ok(user);
+           
+            return Ok(_repo.Add(user));
         }
 
         [HttpPost]
         public IActionResult Update(AppUser user)
         {
-            _context.Users.Update(user);
-            _context.SaveChanges();
-            return Ok(user);
+            return Ok(_repo.Update(user));
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            //SOFT DELETE
-            AppUser user = _context.Users.Find(id);
-            user.IsDeleted = true;
-       
-            _context.Users.Update(user);
-
-            _context.SaveChanges();
-            return Ok();
+            return Ok(_repo.Delete(id) is object);
 
         }
 
         public IActionResult GetAll()
         {
-            var result = _context.Users.Where(u => u.IsDeleted == false).ToList();
+         
 
-            return Json(new { data = result });
+            return Json(new { data = _repo.GetAll() });
 
         }
     }

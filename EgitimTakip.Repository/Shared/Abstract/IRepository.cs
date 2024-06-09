@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EgitimTakip.Repository.Shared.Abstract
+namespace EgitimTakip.IRepository.Shared.Abstract
 {
     public interface IRepository<T> where T : class
     {
