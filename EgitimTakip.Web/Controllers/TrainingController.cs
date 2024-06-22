@@ -51,5 +51,14 @@ namespace EgitimTakip.Web.Controllers
         {
             return Ok(_repo.Delete(id) is object);
         }
+        [HttpPost]
+        public IActionResult UpdateAttendees(int trainingId,List<Employee> attendees) {
+
+            return Ok(_repo.UpdateAttendees(trainingId, attendees) is object);
+        
+
+
+
+        }
     }
 }

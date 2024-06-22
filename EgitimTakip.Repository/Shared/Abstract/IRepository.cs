@@ -10,7 +10,8 @@ namespace EgitimTakip.IRepository.Shared.Abstract
     public interface IRepository<T> where T : class
     {
         //T=Employee
-        ICollection<T> GetAll();
+        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
         T Add(T entity);
         List<T> AddRange(List<T> entities);
         T Update(T entity);

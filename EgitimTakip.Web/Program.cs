@@ -3,6 +3,8 @@ using EgitimTakip.IRepository.Abstract;
 using EgitimTakip.IRepository.Concrete;
 using EgitimTakip.IRepository.Shared.Abstract;
 using EgitimTakip.IRepository.Shared.Concrete;
+using EgitimTakip.Repository.Abstract;
+using EgitimTakip.Repository.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITrainingRepository,TrainingRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 
 

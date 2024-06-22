@@ -22,7 +22,7 @@ namespace EgitimTakip.IRepository.Concrete
 
         public ICollection<Employee> GetAll(int companyId)
         {
-          return  base.GetAll().Where(emp => emp.CompanyId == companyId).ToList();
+          return  base.GetAll(emp => emp.CompanyId == companyId).ToList();
 
           //  return _context.Employees.Where(e=>!e.IsDeleted && e.CompanyId==companyId).ToList();
         }

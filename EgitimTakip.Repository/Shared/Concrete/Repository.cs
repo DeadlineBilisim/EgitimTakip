@@ -60,12 +60,17 @@ namespace EgitimTakip.IRepository.Shared.Concrete
             Save();
         }
 
-        public ICollection<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.Where(x => !x.IsDeleted).ToList();
+            return _dbSet.Where(x => !x.IsDeleted);
         }
 
-        public T GetById(int id)
+        public IQueryable<T> GetAll(Expression<Func<T,bool>> predicate)
+        {
+            return GetAll().Where(predicate);
+        }
+
+        public virtual T GetById(int id)
         {
             return _dbSet.Find(id);
         }
