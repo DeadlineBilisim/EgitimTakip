@@ -56,8 +56,8 @@ namespace EgitimTakip.IRepository.Shared.Concrete
            T entity= _dbSet.Find(id);
             entity.IsDeleted = true;
             
-            _dbSet.Update(entity);
-            Save();
+            Update(entity);
+           
         }
 
         public IQueryable<T> GetAll()

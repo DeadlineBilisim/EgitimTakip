@@ -3,62 +3,49 @@ using EgitimTakip.Models;
 using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using EgitimTakip.Business.Abstract;
+using System.Security.Claims;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class CompanyController : Controller
     {
-        private readonly IRepository<Company> _repo;
+        private readonly ICompanyService _companyService;
 
-        public CompanyController(IRepository<Company> repo)
+        public CompanyController(ICompanyService companyService)
         {
-            _repo = repo;
+            _companyService = companyService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+    
 
         public IActionResult GetAll()
         {
-           return Json(_repo.GetAll());
+           return Json(_companyService.GetAll(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
         [HttpPost]
         public IActionResult Add(Company company)
         {
-            //_context.Companies.Add(company);
-            //_context.SaveChanges();
-            //return Ok(company);
 
-            return Ok(_repo.Add(company));
+            return Ok(_companyService.Add(company));
 
         }
         [HttpPost]
         public IActionResult Update(Company company )
         {
-            //_context.Companies.Update(company);
-            // _context.SaveChanges();
-            // return Ok(company);
-            return Ok(_repo.Update(company));
+           
+            return Ok(_companyService.Update(company));
         }
 
     
         [HttpPost]
         public IActionResult SoftDelete(int id) 
         {
-
-
-            //SOFT DELETE
-            //var company = _context.Companies.Find(id);
-            //company.IsDeleted = true;
-
-            //_context.Companies.Update(company);
-
-            //_context.SaveChanges();
-            //return Ok();
-         //   return Ok(_repo.Delete(id) is object);
-         _repo.Delete(id);
+         _companyService.Delete(id);
             return Ok();
         
         }

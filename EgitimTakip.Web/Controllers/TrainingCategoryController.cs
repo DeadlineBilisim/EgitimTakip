@@ -2,16 +2,17 @@
 using EgitimTakip.Models;
 using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using EgitimTakip.Business.Abstract;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class TrainingCategoryController : Controller
     {
-        private readonly IRepository<TrainingCategory> _repo;
+    private readonly ITrainingCategoryService _trainingCategoryService;
 
-        public TrainingCategoryController(IRepository<TrainingCategory> repo)
+        public TrainingCategoryController(ITrainingCategoryService trainingCategoryService)
         {
-            _repo = repo;
+            _trainingCategoryService = trainingCategoryService;
         }
 
         public IActionResult Index()
@@ -21,13 +22,13 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(new { data = _repo.GetAll() });
+            return Json(new { data = _trainingCategoryService.GetAll() });
         }
         [HttpPost]
         public IActionResult Add(TrainingCategory trainingCategory) 
         {
           
-           TrainingCategory category= _repo.Add(trainingCategory);
+           TrainingCategory category= _trainingCategoryService.Add(trainingCategory);
             if(category.Id==0)
             {
                 return BadRequest();
@@ -42,25 +43,18 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            //   var trainingCategory= _context.TrainingCategories.Find(id);
-            //var trainingCategory = _context.TrainingCategories.FirstOrDefault(tc => tc.Id == id);
-
-            //    trainingCategory.IsDeleted = true;
-            //    _context.TrainingCategories.Update(trainingCategory);
-            //    _context.SaveChanges();
-            //    return Ok();
-            return Ok(_repo.Delete(id) is object);
+            return Ok(_trainingCategoryService.Delete(id) is object);
         }
 
         [HttpPost]
         public IActionResult Update(TrainingCategory trainingCategory)
         {
-            return Ok(_repo.Update(trainingCategory));
+            return Ok(_trainingCategoryService.Update(trainingCategory));
         }
         [HttpPost]
         public IActionResult GetById(int id)
         {
-            return Ok(_repo.GetById(id));
+            return Ok(_trainingCategoryService.GetById(id));
         }
 
 

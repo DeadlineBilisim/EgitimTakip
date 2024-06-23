@@ -1,18 +1,17 @@
 ﻿using EgitimTakip.Data;
 using EgitimTakip.Models;
-using EgitimTakip.IRepository.Abstract;
-using EgitimTakip.IRepository.Shared.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using EgitimTakip.Business.Abstract;
 
 namespace EgitimTakip.Web.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _repo;
+      private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeRepository repo)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _repo = repo;
+            _employeeService = employeeService;
         }
 
         public IActionResult Index()
@@ -23,28 +22,27 @@ namespace EgitimTakip.Web.Controllers
         [HttpPost]
         public IActionResult GetAll(int companyId)
         {
-            //var result = _context.Employees.Where(e=>e.CompanyId==companyId && !e.IsDeleted).ToList();
-            //return Json(new { data = result });
-           return Json(new { data = _repo.GetAll(companyId) });
+           
+            return Json(new { data = _employeeService.GetAll(companyId) });
         }
         [HttpPost]
         public IActionResult Add(Employee employee)
         {
           
-            return Ok(_repo.Add(employee));
+            return Ok(_employeeService.Add(employee));
         }
 
         [HttpPost]
         public IActionResult Update(Employee employee)
         {
            
-            return Ok(_repo.Update(employee));
+            return Ok(_employeeService.Update(employee));
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
           
-            return Ok(_repo.Delete(id) is object);
+            return Ok(_employeeService.Delete(id));
         }
 
       
