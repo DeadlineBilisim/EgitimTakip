@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EgitimTakip.Web.Controllers
 {
+
+    //EXTENSION METHOD
     public class TrainingController : Controller
     {
         private readonly ITrainingRepository _repo;
@@ -19,6 +21,8 @@ namespace EgitimTakip.Web.Controllers
 
         public IActionResult Index()
         {
+            //string emre = "özçelikel";
+            //emre.Test();
             return View();
         }
         public IActionResult GetAll(int companyId)
